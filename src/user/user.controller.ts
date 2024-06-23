@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Version } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Version, VERSION_NEUTRAL } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -17,8 +17,15 @@ export class UserController {
 
   @Get()
   // @Version('1')
+  @Version([VERSION_NEUTRAL, '1'])  // VERSION_NEUTRAL 默认不带版本访问
   findAll() {
     return this.userService.findAll();
+  }
+
+  @Get()
+  @Version('2')
+  findAll2() {
+    return 'i am new one';
   }
 
   @Get(':id')
