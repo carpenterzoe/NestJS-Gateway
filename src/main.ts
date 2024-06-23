@@ -15,6 +15,7 @@ async function bootstrap() {
   // 接口版本化管理
   app.enableVersioning({
     type: VersioningType.URI,
+    defaultVersion: '1',
   });
 
   await app.listen(3000);
