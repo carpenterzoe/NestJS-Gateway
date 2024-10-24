@@ -10,6 +10,14 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @Get('findError')
+  @Version([VERSION_NEUTRAL, '1'])
+  findError() {
+    const a: any = {}
+    console.log(a.b.c)
+    return this.userService.findAll();
+  }
+
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
