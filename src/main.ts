@@ -4,6 +4,7 @@ import {
   FastifyAdapter,
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
+import { TransformInterceptor } from './common/interceptors/transform.interceptor';
 import { AppModule } from './app.module';
 
 async function bootstrap() {
@@ -18,6 +19,8 @@ async function bootstrap() {
     // defaultVersion: '1',
     defaultVersion: [VERSION_NEUTRAL, '1', '2']
   });
+
+  app.useGlobalInterceptors(new TransformInterceptor());
 
   await app.listen(3000);
 }
