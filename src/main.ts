@@ -10,7 +10,15 @@ import { HttpExceptionFilter } from './common/exceptions/http.exception.filter';
 
 import { AppModule } from './app.module';
 
+declare const module: any;
+
 async function bootstrap() {
+
+  if (module.hot) {
+    module.hot.accept();
+    module.hot.dispose(() => app.close());
+  }
+  
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter(),
