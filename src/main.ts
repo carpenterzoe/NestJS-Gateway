@@ -9,16 +9,12 @@ import { AllExceptionsFilter } from './common/exceptions/base.exception.filter';
 import { HttpExceptionFilter } from './common/exceptions/http.exception.filter';
 
 import { AppModule } from './app.module';
+import { generateDocument } from './doc';
 
 declare const module: any;
 
 async function bootstrap() {
 
-  if (module.hot) {
-    module.hot.accept();
-    module.hot.dispose(() => app.close());
-  }
-  
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter(),
@@ -36,6 +32,15 @@ async function bootstrap() {
   
   // 异常拦截 - 非http异常? &  http异常  非http异常具体是什么异常
   app.useGlobalFilters(new AllExceptionsFilter(), new HttpExceptionFilter());
+
+  // 热更新
+  if (module.hot) {
+    module.hot.accept();
+    module.hot.dispose(() => app.close());
+  }
+
+  // 创建文档
+  generateDocument(app)
 
   await app.listen(3000);
 }
