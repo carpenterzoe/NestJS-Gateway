@@ -1,4 +1,4 @@
-import { VersioningType, VERSION_NEUTRAL } from '@nestjs/common';
+import { ValidationPipe, VersioningType, VERSION_NEUTRAL } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import {
   FastifyAdapter,
@@ -38,6 +38,9 @@ async function bootstrap() {
     module.hot.accept();
     module.hot.dispose(() => app.close());
   }
+
+  // 启动全局字段校验
+  app.useGlobalPipes(new ValidationPipe());
 
   // 创建文档
   generateDocument(app)
