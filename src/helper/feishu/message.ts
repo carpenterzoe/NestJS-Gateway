@@ -7,12 +7,10 @@ export enum MSG_TYPE { text, post, image, file, audio, media, sticker, interacti
 export type MESSAGES_PARAMS = {
   receive_id: string
   content: string
-  msg_type: MSG_TYPE
+  msg_type?: MSG_TYPE
 }
 
 export const messages = async (receive_id_type: RECEIVE_TYPE, params: MESSAGES_PARAMS, app_token: string) => {
-  console.log(receive_id_type, params, app_token)
-
   const { data } = await methodV({
     url: `/im/v1/messages`,
     method: 'POST',
