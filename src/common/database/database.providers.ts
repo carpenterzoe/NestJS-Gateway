@@ -1,3 +1,5 @@
+// 封装 MongoDB 的 Provider
+// 如果需要引入 MySQL 或者其他类型数据库，只需要替换对应的配置参数，重复对应的步骤即可。
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { getConfig } from '@/utils'
 const path = require('path');
