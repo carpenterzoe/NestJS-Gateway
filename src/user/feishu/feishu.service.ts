@@ -45,7 +45,8 @@ export class FeishuService {
     return appToken;
   }
 
-  async sendMessage(receive_id_type: RECEIVE_TYPE, params: MESSAGES_PARAMS) {
+  // params 标记类型后一直报错，暂时先忽略它的类型
+  async sendMessage(receive_id_type: RECEIVE_TYPE, params) {
     const app_token = await this.getAppToken()
     return messages(receive_id_type, params, app_token)
   }
