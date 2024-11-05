@@ -5,12 +5,15 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { ConfigModule } from '@nestjs/config';
+import { redisStore }  from 'cache-manager-redis-yet'
 import { getConfig } from './utils';
 
 @Module({
   imports: [
     CacheModule.register({
       isGlobal: true,
+      store: redisStore,
+      url: 'redis://localhost:6379',
     }),
     MongooseModule.forRoot('mongodb://localhost:27017/'),
     ConfigModule.forRoot({

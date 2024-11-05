@@ -24,7 +24,7 @@ const MONGODB_DATABASE_CONFIG = {
 }
 
 // 可以看到这里 entities 路径是 dist/xx，是编译后的路径，不是src的路径
-console.log('entities', MONGODB_DATABASE_CONFIG.entities);
+// console.log('entities', MONGODB_DATABASE_CONFIG.entities);
 
 const MONGODB_DATA_SOURCE = new DataSource(MONGODB_DATABASE_CONFIG)
 

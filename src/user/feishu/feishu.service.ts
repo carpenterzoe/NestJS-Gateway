@@ -36,7 +36,10 @@ export class FeishuService {
         // token 有效期为 2 小时，在此期间调用该接口 token 不会改变。
         // 当 token 有效期小于 30 分的时候,再次请求获取 token 的时候，会生成一个新的 token，与此同时老的 token 依然有效。
         appToken = response.app_access_token;
-        const ttl = response.expire - 60
+        
+         // cacheManager set ttl 是毫秒，而接口拿到的是秒，所以转换一下
+        const ttl = (response.expire - 60) * 1000
+       
         this.cacheManager.set(this.APP_TOKEN_CACHE_KEY, appToken, ttl);
       } else {
         throw new BusinessException('飞书调用异常')
