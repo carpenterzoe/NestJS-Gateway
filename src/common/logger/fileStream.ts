@@ -3,7 +3,7 @@ import { dirname } from 'path'
 import { createWriteStream, stat, rename } from 'fs'
 
 const assert = require("assert")  // 断言表达式
-const mkdirp = require("mkdirp")
+const mkdirp = require("mkdirp")  // 创建文件夹
 
 import { LogStream } from "./logStream"
 
@@ -30,7 +30,8 @@ const onError = (err) => {
 
 const fileExists = async (srcPath) => {
   return new Promise((resolve, reject) => {
-    // fs.stat方法用于异步地获取文件或文件夹的状态信息。该方法接收两个参数：要获取状态的文件或文件夹的路径，以及一个回调函数。
+    // fs.stat方法 用于异步地获取文件或文件夹的状态信息。
+    // 该方法接收两个参数：要获取状态的文件或文件夹的路径，以及一个回调函数。
     // 回调函数包含两个参数：一个错误对象（如果在获取状态过程中发生错误）和一个fs.Stats对象，后者包含了文件或文件夹的详尽信息。
     stat(srcPath, (err, stats) => {
       // isFile()：如果文件是一个普通文件，则返回true。
@@ -46,6 +47,7 @@ const fileExists = async (srcPath) => {
 
 const fileRename = async (oldPath, newPath) => {
   return new Promise((resolve, reject) => {
+    // fs.rename方法既可以用于重命名和移动文件，也可以用于重命名和移动文件夹。
     rename(oldPath, newPath, (e) => {
       resolve(e ? false : true);
     })
@@ -76,11 +78,15 @@ export class FileStream extends LogStream {
     this._timer = null
     this._bufSize = 0
     this._buf = []
-    this.lastPlusName = this._getPlusName();
+    this.lastPlusName = this._getPlusName();  // 根据日志分割时间配置和当前时间，生成对应的文件夹后缀
     this.reload()
     this._RotateTimer = this._createRotateInterval();
   }
 
+  // 这个方法啥时候谁调用的???
+  // super 继承调用的 logStream this.log()
+  // super 调用父类的构造函数时，同名函数，先执行 父类的，再执行子类的
+  // 这里 logStream.log 和 FileStream.log 都执行了
   log(data) {
     data = this.format(this.jsonParse(data))
     if (data) this._write(data + '\n')
@@ -151,6 +157,10 @@ export class FileStream extends LogStream {
 
     // 创建一个要写入的文件流
     // e.g. let ws = fs.createWriteStream('./2.txt');
+
+    // fs.WriteStream 用于将数据写入文件系统
+    // 与传统的文件写入方法（如fs.writeFileSync）相比，使用 fs.WriteStream 可以以非阻塞的方式写入文件
+    // 这对于处理大量数据或需要高性能I/O操作的场景尤为重要。
     const stream = createWriteStream(this.options.fileName, { flags: 'a' })
     stream.on('error', onError)
     return stream
@@ -217,11 +227,18 @@ export class FileStream extends LogStream {
   _checkRotate() {
     let flag = false
 
-    const plusName = this._getPlusName()
+    // 根据日志分割时间配置和当前时间，生成对应的文件夹后缀
+    // e.g.  .2024-11-6_20
+    const plusName = this._getPlusName()  
+
+    // 如果还是当前设置的间隔区间，则不会创建新文件，还是log到原有的文件中
     if (plusName === this.lastPlusName) {
       return
     }
     this.lastPlusName = plusName;
+
+    // 把 xx.log 文件，重命名为 xx.log.2024-11-6_20 ???
+    // 相当于始终保持 xx.log 记录的是最新的日志 ?
     this.renameOrDelete(this.options.fileName, this.options.fileName + plusName)
       .then(() => {
         this.reloadStream()
@@ -253,6 +270,7 @@ export class FileStream extends LogStream {
    * 源文件 srcPath 必须存在，而重命名后的 targetPath 必须事先不存在
    */
   async renameOrDelete(srcPath, targetPath) {
+    console.log('srcPath, targetPath: ', srcPath, targetPath);
     if (srcPath === targetPath) {
       return
     }
