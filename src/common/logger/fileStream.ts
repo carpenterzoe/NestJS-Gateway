@@ -19,9 +19,9 @@ const defaultOptions = {
 
 const onError = (err) => {
   console.error(
-    '%s ERROR %s [chair-logger:buffer_write_stream] %s: %s\n%s',
+    '%s ERROR %s [chair-logger:buffer_write_stream] %s: %s\n%s',  // 某种 error log 格式化?
     new Date().toString(),
-    process.pid,
+    process.pid,  // 进程ID号
     err.name,
     err.message,
     err.stack
@@ -30,8 +30,11 @@ const onError = (err) => {
 
 const fileExists = async (srcPath) => {
   return new Promise((resolve, reject) => {
-    // 自运行返回Promise
+    // fs.stat方法用于异步地获取文件或文件夹的状态信息。该方法接收两个参数：要获取状态的文件或文件夹的路径，以及一个回调函数。
+    // 回调函数包含两个参数：一个错误对象（如果在获取状态过程中发生错误）和一个fs.Stats对象，后者包含了文件或文件夹的详尽信息。
     stat(srcPath, (err, stats) => {
+      // isFile()：如果文件是一个普通文件，则返回true。
+      // isDirectory()：如果文件是一个目录，则返回true。
       if (!err && stats.isFile()) {
         resolve(true);
       } else {
@@ -142,8 +145,10 @@ export class FileStream extends LogStream {
 
     // @Function dirname 
     // Return the directory name of a path !注意，只到文件夹层级 directory!!
+
+    // mkdirp 递归创建文件夹
     mkdirp.sync(dirname(this.options.fileName)) // D:\frontend\code\gateway\logs
-    
+
     // 创建一个要写入的文件流
     // e.g. let ws = fs.createWriteStream('./2.txt');
     const stream = createWriteStream(this.options.fileName, { flags: 'a' })
@@ -244,6 +249,8 @@ export class FileStream extends LogStream {
    * 重命名文件
    * @param {*} srcPath 
    * @param {*} targetPath 
+   * 
+   * 源文件 srcPath 必须存在，而重命名后的 targetPath 必须事先不存在
    */
   async renameOrDelete(srcPath, targetPath) {
     if (srcPath === targetPath) {
