@@ -3,9 +3,10 @@ import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import {
   getAppToken,
   // getUserAccessToken,
-  // getUserToken,
+  getUserToken,
   // refreshUserToken,
 } from 'src/helper/feishu/auth';
+import { GetUserTokenDto } from './feishu.dto';
 
 import {
   messages,
@@ -53,4 +54,18 @@ export class FeishuService {
     const app_token = await this.getAppToken()
     return messages(receive_id_type, params, app_token)
   }
+
+  // service层 处理具体的业务逻辑 & 调外部服务
+  async getUserToken(code: string) {
+    const app_token = await this.getAppToken()
+    const dto: GetUserTokenDto = {
+      code,
+      app_token
+    };
+    const res: any = await getUserToken(dto);
+    if (res.code !== 0) {
+      throw new BusinessException(res.msg);
+    }
+    return res.data;
+}
 }
