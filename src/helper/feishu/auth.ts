@@ -45,3 +45,26 @@ export const getUserToken = async ({ code, app_token }) => {
   // 但前提是这个应用拥有对应的模块接口权限才能够正常调用。
   return data;
 };
+
+/**
+ * 刷新用户凭证
+ * 
+ * 安全起见，飞书获取的 access_token 和 refresh_token 均存在有效期
+ * access_token 有效期为 2小时
+ * 过期之前可以通过有效期更长的 refresh_token 缓存新的 access_token，来保证能够正常调用飞书接口
+ */
+export const refreshUserToken = async ({ refreshToken, app_token }) => {
+  const { data } = await methodV({
+    url: `/authen/v1/refresh_access_token`,
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${app_token}`,
+    },
+    params: {
+      grant_type: 'refresh_token',
+      refresh_token: refreshToken,
+      app_token,
+    },
+  });
+  return data;
+};

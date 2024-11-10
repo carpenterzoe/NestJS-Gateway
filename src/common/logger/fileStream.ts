@@ -270,7 +270,6 @@ export class FileStream extends LogStream {
    * 源文件 srcPath 必须存在，而重命名后的 targetPath 必须事先不存在
    */
   async renameOrDelete(srcPath, targetPath) {
-    console.log('srcPath, targetPath: ', srcPath, targetPath);
     if (srcPath === targetPath) {
       return
     }
