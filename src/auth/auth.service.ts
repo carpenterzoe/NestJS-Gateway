@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
+import { JwtService } from '@nestjs/jwt';  // jwtService.signIn 调jwt的服务登录
 import { FeishuUserInfo } from '@/user/feishu/feishu.dto';
-import { FeishuService } from '@/user/feishu/feishu.service';
-import { User } from '@/user/user.mongo.entity';
-import { UserService } from '@/user/user.service';
+import { FeishuService } from '@/user/feishu/feishu.service'; // 调 FeishuService 拿用户token 用户基本信息
+import { User } from '@/user/user.mongo.entity';  // User 类 这里是用来类型标记
+import { UserService } from '@/user/user.service';  // 保存用户数据
 
 // 该模块代码中分为两个模块
 // 一个是获取飞书用户信息 & 对获取到的用户信息本地落库
@@ -36,7 +36,7 @@ export class AuthService {
     return feishuInfo;
   }
 
-  // 验证飞书用户 
+  // 验证飞书用户
   async validateFeishuUser(code: string): Promise<Payload> {
     // ? code 错误，没拿到 feishuInfo 的情况，未处理??
     console.log('code: ', code);
