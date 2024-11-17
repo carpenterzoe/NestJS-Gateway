@@ -25,6 +25,7 @@ export class FeishuController {
   @Post('getUserToken')
   getUserToken(@Body() params: GetUserTokenDto) {
     const { code } = params
+    // 根据授权登录的code，拿到 access_token 和 用户信息
     return this.feishuService.getUserToken(code);
   }
 }

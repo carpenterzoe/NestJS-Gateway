@@ -49,6 +49,8 @@ export class AuthController {
     response.setCookie('jwt', access_token, {
       path: '/',
     });
+
+    // 这里返回的是 jwt 根据user信息生成的，而 /getUserToken 返回的 是feishu api拿到的
     return access_token
   }
 
