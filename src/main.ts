@@ -1,6 +1,8 @@
 import { ValidationPipe, VersioningType, VERSION_NEUTRAL } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import fastify from 'fastify';
+import cookie from '@fastify/cookie'
+
 import {
   FastifyAdapter,
   NestFastifyApplication,
@@ -16,9 +18,13 @@ import { generateDocument } from './doc';
 declare const module: any;
 
 async function bootstrap() {
-
+  
   const fastifyInstance = fastify({
     logger: FastifyLogger,
+  })
+
+  fastifyInstance.register(cookie, {
+    secret: 'yyds', // 签名密钥，非常重要
   })
 
   const app = await NestFactory.create<NestFastifyApplication>(
