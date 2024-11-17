@@ -1,7 +1,7 @@
 import { ValidationPipe, VersioningType, VERSION_NEUTRAL } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import fastify from 'fastify';
-import cookie from '@fastify/cookie'
+import fastifyCookie from '@fastify/cookie'
 
 import {
   FastifyAdapter,
@@ -23,14 +23,18 @@ async function bootstrap() {
     logger: FastifyLogger,
   })
 
-  fastifyInstance.register(cookie, {
-    secret: 'yyds', // 签名密钥，非常重要
-  })
+  // fastifyInstance.register(cookie, {
+  //   secret: 'my-secret', // 签名密钥，非常重要
+  // })
 
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter(fastifyInstance),
   );
+
+  app.register(fastifyCookie, {
+       secret: 'my-secret', // for cookies signature
+    });
 
   // 接口版本化管理
   app.enableVersioning({
