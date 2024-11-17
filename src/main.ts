@@ -58,9 +58,12 @@ async function bootstrap() {
   // 启动全局字段校验
   app.useGlobalPipes(new ValidationPipe());
 
+  // 全部都 exclude，不就相当于没配吗? 还需要写这个干啥
+  app.setGlobalPrefix('api', { exclude: ['*'] }); 
+
   // 创建文档
   generateDocument(app)
 
-  await app.listen(3000);
+  await app.listen(80);
 }
 bootstrap();

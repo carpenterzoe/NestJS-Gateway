@@ -1,12 +1,16 @@
 import { Module } from '@nestjs/common';
 import { CacheModule } from '@nestjs/cache-manager';
 import { MongooseModule } from '@nestjs/mongoose';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { UserModule } from './user/user.module';
 import { ConfigModule } from '@nestjs/config';
 import { redisStore }  from 'cache-manager-redis-yet'
 import { getConfig } from './utils';
+
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+
+import { IntercepterModule } from './core/intercepter.module'
+import { UserModule } from './user/user.module';
+
 import { APP_GUARD } from '@nestjs/core';
 import { AuthModule } from './auth/auth.module';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
@@ -26,6 +30,7 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
     }),
     UserModule,
     AuthModule,
+    IntercepterModule,
   ],
   controllers: [AppController],
   providers: [
