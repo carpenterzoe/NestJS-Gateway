@@ -1,6 +1,8 @@
 import { ValidationPipe, VersioningType, VERSION_NEUTRAL } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import fastify from 'fastify';
+import fastifyCookie from '@fastify/cookie'
+
 import {
   FastifyAdapter,
   NestFastifyApplication,
@@ -16,15 +18,23 @@ import { generateDocument } from './doc';
 declare const module: any;
 
 async function bootstrap() {
-
+  
   const fastifyInstance = fastify({
     logger: FastifyLogger,
   })
+
+  // fastifyInstance.register(cookie, {
+  //   secret: 'my-secret', // 签名密钥，非常重要
+  // })
 
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter(fastifyInstance),
   );
+
+  app.register(fastifyCookie, {
+       secret: 'my-secret', // for cookies signature
+    });
 
   // 接口版本化管理
   app.enableVersioning({
@@ -48,9 +58,12 @@ async function bootstrap() {
   // 启动全局字段校验
   app.useGlobalPipes(new ValidationPipe());
 
+  // 全部都 exclude，不就相当于没配吗? 还需要写这个干啥
+  app.setGlobalPrefix('api', { exclude: ['*'] }); 
+
   // 创建文档
   generateDocument(app)
 
-  await app.listen(3000);
+  await app.listen(80);
 }
 bootstrap();

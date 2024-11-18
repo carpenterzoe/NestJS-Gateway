@@ -16,6 +16,7 @@ import { DatabaseModule } from '@/common/database/database.module';
   ],
   // UserProviders 数据库配置可能不止一种
   providers: [...UserProviders, UserService, FeishuService],
-  exports: [UserService],
+  // FeishuService 必须要导出，其他模块才能调用这个服务
+  exports: [UserService, FeishuService],
 })
 export class UserModule { }

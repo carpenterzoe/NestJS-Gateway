@@ -5,8 +5,9 @@ import { AppService } from './app.service';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
-  }
+  // 这里跟 intercepter.controller 的默认入口重复了
+  // @Get()
+  // getHello(): string {
+  //   return this.appService.getHello();
+  // }
 }
