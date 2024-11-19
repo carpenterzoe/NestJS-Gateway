@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { CacheModule } from '@nestjs/cache-manager';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
-import { redisStore }  from 'cache-manager-redis-yet'
+import { redisStore } from 'cache-manager-redis-yet'
 import { getConfig } from './utils';
 
 import { AppController } from './app.controller';
